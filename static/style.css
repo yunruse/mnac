@@ -1,0 +1,101 @@
+#game, .board {  
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-content: space-between;
+    align-items: stretch;
+}
+
+#game, .board, .cell {
+    aspect-ratio: 1;
+}
+
+.container {
+    text-align: center;
+}
+#game {
+    text-align: center;
+    width: 100%;
+    max-width: 60vh;
+    gap: 5px;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+}
+.board {
+    background-color: #ddd;
+    gap: 4px;
+    width: calc(33% - 10px);
+    border: 2px solid transparent;
+}
+.cell {
+    width: calc(33% - 5px);
+    background-color: #eee;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.cell.teleport {
+    background-color: #cfc
+}
+.cell.noughts, .board.noughts {
+    background: url("./noughts.svg");
+    background-size: 100%;
+    background-color: #874400;
+}
+.cell.crosses, .board.crosses {
+    background: url("./cross.svg");
+    background-size: 100%;
+    background-color: #1a5ea1;
+}
+
+body.noughts {
+    background-color: #fff0e1;
+}
+body.crosses {
+    background-color: #e6f2ff;
+}
+
+.noughts .board.selected {
+    border-color: #d66b00;
+}
+.crosses .board.selected {
+    border-color: #0068cf;
+}
+
+.board.noughts .cell,
+.board.crosses .cell {
+    display: none;
+}
+
+
+.cell.crosses .cellTag,
+.cell.noughts .cellTag
+{
+    display: none;
+}
+
+/* TODO: 123QWEASD markers!!! */
+
+
+#state {
+    height: 3em;
+}
+
+h1 {
+    font-weight: normal;
+}
+.bold {
+    font-weight: bold;
+}
+
+label {
+    display: inline-block;
+}
+input {
+    background-color: white;
+}
+
+#timerMinutes {
+    width: 2em;
+}

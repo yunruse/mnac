@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8">
+    <title>Meta noughts and crosses</title>
+    <meta name="theme-color" content="#FD7928">
+    <link rel="stylesheet" href="./static/normalize.css" type="text/css">
+    <link rel="stylesheet" href="./static/sakura.css" type="text/css">
+    <link rel="stylesheet" href="./static/style.css" type="text/css">
+    <!--
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icon180.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon512.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icon32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icon16.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    -->
+    <script src="helpers.js"></script>
+    <script src="state.js"></script>
+    <script src="board.js"></script>
+    <script src="input.js"></script>
+    <script src="clock.js"></script>
+</head>
+
+<body>
+    <h1>Meta <span id='titleNoughts'>noughts <span id='timerNoughts'></span></span> and <span id='titleCrosses'>crosses <span id='timerCrosses'></span></span></h1>
+    <div class='container'>
+        <div id='game'></div>
+        <button onclick="popHistory();">Undo</button>
+        <button onclick="newGame();">New game</button>
+        <label><input type="checkbox" id="timer"> Game timer</label>
+    </div>
+    <h2 id='state'>
+        Select any cell to start playing
+    </h2>
+
+
+    <h4>How do I play?</h4>
+    <small><em>
+        <p>
+            If you don't want to use a mouse, use the keys <kbd>123 456 789</kbd> to select the respective board or cell.
+            <kbd>QWE ASD ZXC</kbd> works for noughts, and <kbd>UIO JKL M,.</kbd> for crosses.
+            You can always press <kbd>Backspace</kbd> to undo.
+        </p>
+    </em></small>
+    <p>
+        As you can see, there are nine boards, each with nine cells.
+        Each board is its own game of noughts and crosses. If you win
+        three cells in a line, you win that board -- if you win three
+        boards in a line, you win the game!
+    </p>
+    <p>
+        <strong>The golden rule, however, is that your opponent always plays in a different board.</strong>
+        Almost always, this is your choice. If you play in the top-left cell, say, your opponent will
+        be sent to the top-left board. Therefore to take a board, your opponent has to actually send you there
+        - the fun of the game is using your wits to convince them to let you.
+    </p>
+    <p>
+        A few useful tips:
+    </p>
+    <ul>
+        <li>
+            If a cell would send you somewhere disallowed -- for example, the same board,
+            or one that has been won or drawn -- it is a <em>teleporter</em>, marked in green.
+            Playing a cell there results in you being able to choose which board to send your opponent to.
+            Use them before your opponent does!
+        </li>
+        <li>
+            Towards the endgame, the golden rule may be useful to
+            trap your opponent in a board by only leaving two left.
+        </li>
+        <li>
+            The middle board is quite useful.
+            Some times a house rule holds that the first player isn't allowed to start there.
+        </li>
+    </ul>
+</body>
+</html>
