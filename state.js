@@ -3,7 +3,8 @@
 let PLAYER = {
     Noughts: 'Noughts',
     Crosses: 'Crosses',
-    Both: 'Both players',
+    Draw: 'Draw',
+    None: "None",
 }
 let ACTION = {
     PlayStart: "Select any cell to start playing",
@@ -67,15 +68,15 @@ let GRID_WINNERS = [
     [2, 4, 6],
 ]
 function winner(grid) {
-    for (const player of ["Noughts", "Crosses"]) {
+    for (const player of [PLAYER.Noughts, PLAYER.Crosses]) {
         for (const pattern of GRID_WINNERS) {
             if (pattern.every(i => (grid[i] == player))) {
                 return player
             }
         }
     };
-    if (grid.every(p => p != "")) { return "Draw"; }
-    return "";
+    if (grid.every(p => p != "")) { return PLAYER.Draw; }
+    return PLAYER.None;
 }
 
 function boardsTaken() {
@@ -119,29 +120,25 @@ function doPlay(board, cell) {
         return
     }
     state.grid[board][cell] = state.player
-
     state.boardsTaken[board] = winner(state.grid[board]);
-    let gameWinner = winner(state.boardsTaken);
-    if (gameWinner == "Noughts" || gameWinner == "Crosses") {
-        state.action = ACTION.Win;
-        state.player = gameWinner;
-    } else if (gameWinner == "Draw") {
-        state.action = ACTION.Draw;
-        state.player = PLAYER.Both;
-    } else {
-        if (cellMayTeleport(board, cell)) {
-            state.action = ACTION.Send;
-            state.board = board;
-        } else {
-            swapPlayer()
-            state.action = ACTION.Play;
-            state.board = cell;
-        }
-    }
 
-    console.log("TAKEN", boardsTaken())
-    if (boardsTaken() == 8) {
+    let gameWinner = winner(state.boardsTaken);
+    if (gameWinner !== PLAYER.None) {
+        // Win or draw
+        state.action = (gameWinner == PLAYER.Draw) ? ACTION.Draw : ACTION.Win;
+        state.player = gameWinner;
+    } else if (boardsTaken() == 8) {
+        // Draw by exhaustion
         state.action = ACTION.Draw;
-        state.player = PLAYER.Both;
+        state.player = PLAYER.Draw;
+    } else if (cellMayTeleport(board, cell)) {
+        // Player still has to send
+        state.action = ACTION.Send;
+        state.board = board;
+    } else {
+        // Finish turn
+        swapPlayer()
+        state.action = ACTION.Play;
+        state.board = cell;
     }
 }
