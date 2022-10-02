@@ -15,11 +15,11 @@ function refreshBoardElements() {
                 // newElement('span', 'cellTag', b+1)
             )
             return board
-      })
+        })
     );
 }
 
-function doHighlightBoard(board){
+function doHighlightBoard(board) {
     switch (state.action) {
         case ACTION.PlayStart: return true;
         case ACTION.Play: return state.board == board;
@@ -54,7 +54,7 @@ function updateBoard() {
     }
 }
 
-function debugSetDraw(){
+function debugSetDraw() {
     let X = "Crosses"
     let O = "Noughts"
     let _ = "";
@@ -64,7 +64,7 @@ function debugSetDraw(){
         X, X, O]);
 }
 
-function newGame(){
+function newGame() {
     resetGameState();
     updateBoard();
 
@@ -75,7 +75,7 @@ function newGame(){
     }
 }
 
-window.onload = function(){
+window.onload = function () {
     refreshBoardElements()
     newGame()
     // debugSetDraw()

@@ -2,7 +2,7 @@
 
 function cellWasClicked(board, cell) {
     console.group(`Cell ${board},${cell} was clicked`)
-    
+
     pushHistory();
     switch (state.action) {
         case ACTION.Play:
@@ -47,7 +47,7 @@ const KB_CROSSES = {
 window.addEventListener("keyup", function (event) {
     if (event.defaultPrevented) return;
     let key = event.key.toLowerCase();
-    
+
     if (state.player == PLAYER.Noughts)
         key = KB_NOUGHTS[key] || key;
     if (state.player == PLAYER.Crosses)
