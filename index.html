@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en-GB">
+
 <head>
     <meta charset="utf-8">
     <title>Meta noughts and crosses</title>
@@ -23,7 +24,12 @@
 </head>
 
 <body>
-    <h1>Meta <span id='titleNoughts'>noughts <span id='timerNoughts'></span></span> and <span id='titleCrosses'>crosses <span id='timerCrosses'></span></span></h1>
+    <h1>
+        Meta
+        <span id='titleNoughts'>noughts <span id='timerNoughts'></span></span>
+        and
+        <span id='titleCrosses'>crosses <span id='timerCrosses'></span></span>
+    </h1>
     <div class='container'>
         <div id='game'></div>
         <button onclick="popHistory();">Undo</button>
@@ -35,14 +41,18 @@
     </h2>
 
 
+    <small>(Source code on <a href="https://github.com/yunruse/mnac/">GitHub</a>!)</small>
     <h4>How do I play?</h4>
     <small><em>
-        <p>
-            If you don't want to use a mouse, use the keys <kbd>123 456 789</kbd> to select the respective board or cell.
-            <kbd>QWE ASD ZXC</kbd> works for noughts, and <kbd>UIO JKL M,.</kbd> for crosses.
-            You can always press <kbd>Backspace</kbd> to undo.
-        </p>
-    </em></small>
+            <p>
+                If you don't want to use a mouse, use the keys
+                <kbd>123 456 789</kbd>
+                to select the respective board or cell.
+                <kbd>QWE ASD ZXC</kbd> works for noughts, and
+                <kbd>UIO JKL M,.</kbd> for crosses.
+                You can always press <kbd>Backspace</kbd> to undo.
+            </p>
+        </em></small>
     <p>
         As you can see, there are nine boards, each with nine cells.
         Each board is its own game of noughts and crosses. If you win
@@ -75,4 +85,5 @@
         </li>
     </ul>
 </body>
+
 </html>
