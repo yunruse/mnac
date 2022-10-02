@@ -1,4 +1,5 @@
-#game, .board {  
+#game,
+.board {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
@@ -6,13 +7,16 @@
     align-items: stretch;
 }
 
-#game, .board, .cell {
+#game,
+.board,
+.cell {
     aspect-ratio: 1;
 }
 
 .container {
     text-align: center;
 }
+
 #game {
     text-align: center;
     width: 100%;
@@ -22,12 +26,14 @@
     margin-left: auto;
     margin-right: auto;
 }
+
 .board {
     background-color: #ddd;
     gap: 4px;
     width: calc(33% - 10px);
     border: 2px solid transparent;
 }
+
 .cell {
     width: calc(33% - 5px);
     background-color: #eee;
@@ -35,15 +41,20 @@
     font-size: 1.2em;
     font-weight: bold;
 }
+
 .cell.teleport {
     background-color: #cfc
 }
-.cell.noughts, .board.noughts {
+
+.cell.noughts,
+.board.noughts {
     background: url("./noughts.svg");
     background-size: 100%;
     background-color: #874400;
 }
-.cell.crosses, .board.crosses {
+
+.cell.crosses,
+.board.crosses {
     background: url("./cross.svg");
     background-size: 100%;
     background-color: #1a5ea1;
@@ -52,6 +63,7 @@
 body.noughts {
     background-color: #fff0e1;
 }
+
 body.crosses {
     background-color: #e6f2ff;
 }
@@ -59,6 +71,7 @@ body.crosses {
 .noughts .board.selected {
     border-color: #d66b00;
 }
+
 .crosses .board.selected {
     border-color: #0068cf;
 }
@@ -70,13 +83,9 @@ body.crosses {
 
 
 .cell.crosses .cellTag,
-.cell.noughts .cellTag
-{
+.cell.noughts .cellTag {
     display: none;
 }
-
-/* TODO: 123QWEASD markers!!! */
-
 
 #state {
     height: 3em;
@@ -85,6 +94,7 @@ body.crosses {
 h1 {
     font-weight: normal;
 }
+
 .bold {
     font-weight: bold;
 }
@@ -92,6 +102,7 @@ h1 {
 label {
     display: inline-block;
 }
+
 input {
     background-color: white;
 }
