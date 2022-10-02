@@ -30,27 +30,28 @@ function resetGameState() {
     state.boardsTaken = [...Array(9)].map(() => "")
 }
 
-// History
-
-let stateHistory = [];
-function pushHistory(){
-    let newState = JSON.stringify(state);
-    if (stateHistory[stateHistory.length-1] === newState) {
-        console.info("Same history state pushed, skipping...")
-        return;
-    }
-    stateHistory.push(newState);
-}
-function popHistory(){
-    if (stateHistory.length == 0){
-        console.info("No history to undo")
-        return;
-    }
-    let newState = JSON.parse(stateHistory.pop());
-    for (const [k, v] of Object.entries(newState)) {
+// History & state debug functions
+function save() { return JSON.stringify(state) }
+function load(json) {
+    for (const [k, v] of Object.entries(JSON.parse(json))) {
         state[k] = v
     }
     updateBoard();
+}
+
+let stateHistory = [];
+function pushHistory() {
+    let newState = save();
+    if (stateHistory[stateHistory.length - 1] === newState) {
+        return console.info("Same history state pushed, skipping...");
+    }
+    stateHistory.push(newState);
+}
+function popHistory() {
+    if (stateHistory.length == 0) {
+        return console.info("No history to undo");
+    }
+    load(stateHistory.pop());
 }
 
 // Winner calculation
@@ -65,7 +66,7 @@ let GRID_WINNERS = [
     [0, 4, 8], // Diagonal
     [2, 4, 6],
 ]
-function winner(grid){
+function winner(grid) {
     for (const player of ["Noughts", "Crosses"]) {
         for (const pattern of GRID_WINNERS) {
             if (pattern.every(i => (grid[i] == player))) {
@@ -73,7 +74,7 @@ function winner(grid){
             }
         }
     };
-    if (grid.every(p => p != "")){ return "Draw"; }
+    if (grid.every(p => p != "")) { return "Draw"; }
     return "";
 }
 
@@ -81,7 +82,7 @@ function boardsTaken() {
     let total = 0
     for (const b of state.grid)
         if (winner(b) !== "")
-            total += 1 
+            total += 1
     return total
 }
 
@@ -96,11 +97,11 @@ function swapPlayer() {
     clockSwapPlayers();
 }
 
-function cellMayTeleport(board, cell){
+function cellMayTeleport(board, cell) {
     return (board == cell) || state.boardsTaken[cell] !== ""
 }
 
-function doSend(board){
+function doSend(board) {
     if (state.boardsTaken[board] !== "") {
         return console.info("Can't send to occupied board");
     }
@@ -112,13 +113,13 @@ function doSend(board){
     state.action = ACTION.Play;
 }
 
-function doPlay(board, cell){
+function doPlay(board, cell) {
     if (state.grid[board][cell] !== "") {
         console.info("This cell is already taken!");
         return
     }
     state.grid[board][cell] = state.player
-    
+
     state.boardsTaken[board] = winner(state.grid[board]);
     let gameWinner = winner(state.boardsTaken);
     if (gameWinner == "Noughts" || gameWinner == "Crosses") {
@@ -136,7 +137,7 @@ function doPlay(board, cell){
             state.action = ACTION.Play;
             state.board = cell;
         }
-    }   
+    }
 
     console.log("TAKEN", boardsTaken())
     if (boardsTaken() == 8) {
