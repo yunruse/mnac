@@ -81,7 +81,7 @@ function winner(grid) {
     return PLAYER.None;
 }
 
-function boardsTaken() {
+function countBoardsTaken() {
     let total = 0
     for (const b of state.grid)
         if (winner(b) !== PLAYER.None)
@@ -130,7 +130,7 @@ function doPlay(board, cell) {
         // Win or draw
         state.action = (gameWinner == PLAYER.Draw) ? ACTION.Draw : ACTION.Win;
         state.player = gameWinner;
-    } else if (boardsTaken() == 8) {
+    } else if (countBoardsTaken() == 8) {
         // Draw by exhaustion
         state.action = ACTION.Draw;
         state.player = PLAYER.Draw;
