@@ -23,7 +23,7 @@ function doHighlightBoard(board) {
     switch (state.action) {
         case ACTION.PlayStart: return true;
         case ACTION.Play: return state.board == board;
-        case ACTION.Send: return state.board !== board && state.boardsTaken[board] == "";
+        case ACTION.Send: return state.board !== board && state.boardsTaken[board] == PLAYER.None;
         default: return false;
     }
 }
@@ -47,7 +47,7 @@ function updateBoard() {
             const cell = cells[c]
             let player = state.grid[b][c]
 
-            classy(cell, "teleport", (player == "") && cellMayTeleport(b, c))
+            classy(cell, "teleport", (player == PLAYER.None) && cellMayTeleport(b, c))
             classy(cell, "noughts", player == PLAYER.Noughts)
             classy(cell, "crosses", player == PLAYER.Crosses)
         }
@@ -55,9 +55,9 @@ function updateBoard() {
 }
 
 function debugSetDraw() {
-    let X = "Crosses"
-    let O = "Noughts"
-    let _ = "";
+    let X = PLAYER.Crosses
+    let O = PLAYER.Noughts
+    let _ = PLAYER.None;
     state.grid = [...Array(9)].map(() => [
         X, O, O,
         O, _, X,

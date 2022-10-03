@@ -27,8 +27,8 @@ function resetGameState() {
     state.player = PLAYER.Noughts
     state.action = ACTION.PlayStart
     state.board = undefined
-    state.grid = [...Array(9)].map(() => [...Array(9)].map(() => ""))
-    state.boardsTaken = [...Array(9)].map(() => "")
+    state.grid = [...Array(9)].map(() => [...Array(9)].map(() => PLAYER.None))
+    state.boardsTaken = [...Array(9)].map(() => PLAYER.None)
 }
 
 // History & state debug functions
@@ -75,14 +75,16 @@ function winner(grid) {
             }
         }
     };
-    if (grid.every(p => p != "")) { return PLAYER.Draw; }
+    if (grid.every(p => p != PLAYER.None)) {
+        return PLAYER.Draw;
+    }
     return PLAYER.None;
 }
 
 function boardsTaken() {
     let total = 0
     for (const b of state.grid)
-        if (winner(b) !== "")
+        if (winner(b) !== PLAYER.None)
             total += 1
     return total
 }
@@ -99,11 +101,12 @@ function swapPlayer() {
 }
 
 function cellMayTeleport(board, cell) {
-    return (board == cell) || state.boardsTaken[cell] !== ""
+    return (board == cell) || (
+        state.boardsTaken[cell] !== PLAYER.None)
 }
 
 function doSend(board) {
-    if (state.boardsTaken[board] !== "") {
+    if (state.boardsTaken[board] !== PLAYER.None) {
         return console.info("Can't send to occupied board");
     }
     if (state.board == board) {
@@ -115,7 +118,7 @@ function doSend(board) {
 }
 
 function doPlay(board, cell) {
-    if (state.grid[board][cell] !== "") {
+    if (state.grid[board][cell] !== PLAYER.None) {
         console.info("This cell is already taken!");
         return
     }
