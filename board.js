@@ -38,8 +38,8 @@ function updateBoard() {
 
     let boards = document.getElementById('game').children
     for (let b = 0; b < 9; b++) {
-        classy(boards[b], 'noughts', state.boardsTaken[b] == 'Noughts')
-        classy(boards[b], 'crosses', state.boardsTaken[b] == 'Crosses')
+        classy(boards[b], 'noughts', state.boardsTaken[b] == PLAYER.Noughts)
+        classy(boards[b], 'crosses', state.boardsTaken[b] == PLAYER.Crosses)
         classy(boards[b], 'selected', doHighlightBoard(b))
 
         let cells = boards[b].children

@@ -1,10 +1,10 @@
 // Enums
 
 let PLAYER = {
-    Noughts: 'Noughts',
-    Crosses: 'Crosses',
-    Draw: 'Draw',
-    None: "None",
+    Noughts: 'O',
+    Crosses: 'X',
+    Draw: '?',
+    None: "_",
 }
 let ACTION = {
     PlayStart: "Select any cell to start playing",

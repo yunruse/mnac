@@ -34,7 +34,7 @@ function onTick() {
     let t = timePassed();
     let O = clockState.nought;
     let X = clockState.cross;
-    if (state.player == "Noughts") {
+    if (state.player == PLAYER.Noughts) {
         O = O - t;
     } else {
         X = X - t;
