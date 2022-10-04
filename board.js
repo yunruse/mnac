@@ -1,7 +1,14 @@
+function newElement(tag, cls) {
+    var el = document.createElement(String(tag))
+    el.classList = [cls]
+    return el
+}
+function classy(element, cls, bool) {
+    bool ? element.classList.add(cls) : element.classList.remove(cls);
+}
+
 function refreshBoardElements() {
-    // Refresh board elements
-    let gameBoard = document.getElementById('game');
-    gameBoard.replaceChildren(
+    document.getElementById('game').replaceChildren(
         ...[...Array(9)].map((_, b) => {
             let board = newElement('div', 'board');
             board.onclick = () => boardWasClicked(b)
@@ -9,10 +16,8 @@ function refreshBoardElements() {
                 ...[...Array(9)].map((_, c) => {
                     let cell = newElement('div', 'cell')
                     cell.onclick = () => cellWasClicked(b, c)
-                    // cell.replaceChildren(newElement('span', 'cellTag', c+1))
                     return cell
                 }),
-                // newElement('span', 'cellTag', b+1)
             )
             return board
         })
@@ -29,12 +34,12 @@ function doHighlightBoard(board) {
 }
 function updateBoard() {
     document.getElementById('state').innerText = state.action;
-    classy(document.getElementById("titleNoughts"), "bold", state.player == PLAYER.Noughts)
-    classy(document.body, "noughts", state.player == PLAYER.Noughts)
-    classy(document.getElementById("titleCrosses"), "bold", state.player == PLAYER.Crosses)
-    classy(document.body, "crosses", state.player == PLAYER.Crosses)
-
-    // classy(document.getElementById("game"), "selection", state.action == ACTION.PlayStart || state.action == ACTION.Send)
+    let O = state.player == PLAYER.Noughts;
+    let X = state.player == PLAYER.Crosses;
+    classy(document.getElementById("titleNoughts"), "bold", O)
+    classy(document.body, "noughts", O)
+    classy(document.getElementById("titleCrosses"), "bold", X)
+    classy(document.body, "crosses", X)
 
     let boards = document.getElementById('game').children
     for (let b = 0; b < 9; b++) {
@@ -54,30 +59,14 @@ function updateBoard() {
     }
 }
 
-function debugSetDraw() {
-    let X = PLAYER.Crosses
-    let O = PLAYER.Noughts
-    let _ = PLAYER.None;
-    state.grid = [...Array(9)].map(() => [
-        X, O, O,
-        O, _, X,
-        X, X, O]);
-}
-
 function newGame() {
     resetGameState();
     updateBoard();
-
-    if (document.getElementById('timer').checked) {
-        startTimer();
-    } else {
-        stopTimer();
-    }
+    document.getElementById('timer').checked ?
+        startTimer() : stopTimer();
 }
 
 window.onload = function () {
     refreshBoardElements()
     newGame()
-    // debugSetDraw()
-    // updateBoard()
 }
