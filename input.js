@@ -1,10 +1,8 @@
 // TODO: unify this? DRY and all
-// TODO: don't pushHistory if action isn't allowed...
 
 function cellWasClicked(board, cell) {
     console.group(`Cell ${board},${cell} was clicked`)
 
-    pushHistory();
     switch (state.action) {
         case ACTION.Play:
             if (state.board !== board) {
@@ -12,11 +10,11 @@ function cellWasClicked(board, cell) {
                 break;
             }
         case ACTION.PlayStart:
-            doPlay(board, cell);
+            state.doPlay(board, cell);
             break;
 
         case ACTION.Send:
-            doSend(board);
+            state.doSend(board);
             break;
     }
     console.groupEnd()
@@ -27,7 +25,7 @@ function cellWasClicked(board, cell) {
 function boardWasClicked(board) {
     console.log(`Board ${board} was clicked`)
     if (state.action == ACTION.Send) {
-        doSend(board);
+        state.doSend(board);
         updateBoard();
     }
 }
@@ -50,7 +48,6 @@ window.addEventListener("keyup", function (event) {
     let code = Number(key);
     if (isNaN(code) || code == 0) return;
 
-    pushHistory();
     code -= 1;
 
     console.group(`Button ${code} was pressed`)
@@ -60,10 +57,10 @@ window.addEventListener("keyup", function (event) {
             state.board = code;
             break;
         case ACTION.Play:
-            doPlay(state.board, code)
+            state.doPlay(state.board, code)
             break;
         case ACTION.Send:
-            doSend(code);
+            state.doSend(code);
             break;
     }
     console.groupEnd()

@@ -1,60 +1,19 @@
 // Enums
 
-let PLAYER = {
+const PLAYER = {
     Noughts: 'O',
     Crosses: 'X',
     Draw: '?',
     None: "_",
 }
-let ACTION = {
+const ACTION = {
     PlayStart: "Select any cell to start playing",
     Play: "Select a cell to play in",
     Send: "Send your opponent to a different board",
     Draw: "It's a draw!",
     Win: "You win!",
 }
-
-// State
-
-let state = {
-    player: undefined,
-    action: undefined,
-    board: undefined,
-    grid: undefined,
-    boardsTaken: undefined,
-}
-function resetGameState() {
-    state.player = PLAYER.Noughts
-    state.action = ACTION.PlayStart
-    state.board = undefined
-    state.grid = [...Array(9)].map(() => [...Array(9)].map(() => PLAYER.None))
-    state.boardsTaken = [...Array(9)].map(() => PLAYER.None)
-}
-
-// History & state debug functions
-function save() { return JSON.stringify(state) }
-function load(json) {
-    for (const [k, v] of Object.entries(JSON.parse(json)))
-        state[k] = v
-    updateBoard();
-}
-
-let stateHistory = [];
-function pushHistory() {
-    let newState = save();
-    if (stateHistory[stateHistory.length - 1] === newState)
-        return console.info("Same history state pushed, skipping...");
-    stateHistory.push(newState);
-}
-function popHistory() {
-    if (stateHistory.length == 0)
-        return console.info("No history to undo");
-    load(stateHistory.pop());
-}
-
-// Winner calculation
-
-let GRID_WINNERS = [
+const GRID_WINNERS = [
     [0, 3, 6], // Vertical
     [1, 4, 7],
     [2, 5, 8],
@@ -64,6 +23,7 @@ let GRID_WINNERS = [
     [0, 4, 8], // Diagonal
     [2, 4, 6],
 ]
+
 function winner(grid) {
     for (const player of [PLAYER.Noughts, PLAYER.Crosses])
         for (const pattern of GRID_WINNERS)
@@ -74,65 +34,70 @@ function winner(grid) {
     return PLAYER.None;
 }
 
-function countBoardsTaken() {
-    let total = 0
-    for (const b of state.grid)
-        if (winner(b) !== PLAYER.None)
-            total += 1
-    return total
-}
+class MnacGame extends netplayjs.Game {
+    constructor() {
+        super()
+        this.player = PLAYER.Noughts
+        this.action = ACTION.PlayStart
+        this.board = undefined
+        this.grid = [...Array(9)].map(() => [...Array(9)].map(() => PLAYER.None))
+        this.boardsTaken = [...Array(9)].map(() => PLAYER.None)
+    }
+    numBoardsTaken() {
+        let total = 0
+        for (const b of this.grid)
+            if (winner(b) !== PLAYER.None)
+                total += 1
+        return total
+    }
+    // Interactivity
+    swapPlayer() {
+        if (this.player == PLAYER.Noughts)
+            this.player = PLAYER.Crosses;
+        else if (this.player == PLAYER.Crosses)
+            this.player = PLAYER.Noughts;
+    }
+    cellMayTeleport(board, cell) {
+        return (board == cell) || (
+            this.boardsTaken[cell] !== PLAYER.None)
+    }
+    doSend(board) {
+        if (this.boardsTaken[board] !== PLAYER.None)
+            return console.warn("Can't send to occupied board");
+        if (this.board == board)
+            return console.warn("Can't send to own board");
 
-// Interactivity
+        this.board = board;
+        this.swapPlayer()
+        this.action = ACTION.Play;
+    }
+    doPlay(board, cell) {
+        if (this.action === ACTION.PlayStart && board == 4)
+            return console.warn("House rule: cannot start in centre");
+        if (this.grid[board][cell] !== PLAYER.None)
+            return console.warn("This cell is already taken!");
 
-function swapPlayer() {
-    if (state.player == PLAYER.Noughts)
-        state.player = PLAYER.Crosses;
-    else if (state.player == PLAYER.Crosses)
-        state.player = PLAYER.Noughts;
-}
+        this.grid[board][cell] = this.player
+        this.boardsTaken[board] = winner(this.grid[board]);
 
-function cellMayTeleport(board, cell) {
-    return (board == cell) || (
-        state.boardsTaken[cell] !== PLAYER.None)
-}
-
-function doSend(board) {
-    if (state.boardsTaken[board] !== PLAYER.None)
-        return console.warn("Can't send to occupied board");
-    if (state.board == board)
-        return console.warn("Can't send to own board");
-
-    state.board = board;
-    swapPlayer()
-    state.action = ACTION.Play;
-}
-
-function doPlay(board, cell) {
-    if (state.action === ACTION.PlayStart && board == 4)
-        return console.warn("House rule: cannot start in centre");
-    if (state.grid[board][cell] !== PLAYER.None)
-        return console.warn("This cell is already taken!");
-
-    state.grid[board][cell] = state.player
-    state.boardsTaken[board] = winner(state.grid[board]);
-
-    let gameWinner = winner(state.boardsTaken);
-    if (gameWinner !== PLAYER.None) {
-        // Win or draw
-        state.action = (gameWinner == PLAYER.Draw) ? ACTION.Draw : ACTION.Win;
-        state.player = gameWinner;
-    } else if (countBoardsTaken() == 8) {
-        // Draw by exhaustion
-        state.action = ACTION.Draw;
-        state.player = PLAYER.Draw;
-    } else if (cellMayTeleport(board, cell)) {
-        // Player still has to send
-        state.action = ACTION.Send;
-        state.board = board;
-    } else {
-        // Finish turn
-        swapPlayer()
-        state.action = ACTION.Play;
-        state.board = cell;
+        let gameWinner = winner(this.boardsTaken);
+        if (gameWinner !== PLAYER.None) {
+            // Win or draw
+            this.action = (gameWinner == PLAYER.Draw) ? ACTION.Draw : ACTION.Win;
+            this.player = gameWinner;
+        } else if (this.numBoardsTaken() == 8) {
+            // Draw by exhaustion
+            this.action = ACTION.Draw;
+            this.player = PLAYER.Draw;
+        } else if (this.cellMayTeleport(board, cell)) {
+            // Player still has to send
+            this.action = ACTION.Send;
+            this.board = board;
+        } else {
+            // Finish turn
+            this.swapPlayer()
+            this.action = ACTION.Play;
+            this.board = cell;
+        }
     }
 }

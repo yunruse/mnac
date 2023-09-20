@@ -53,15 +53,17 @@ function updateBoard() {
             const cell = cells[c]
             let player = state.grid[b][c]
 
-            classy(cell, "teleport", (player == PLAYER.None) && cellMayTeleport(b, c))
+            classy(cell, "teleport", (player == PLAYER.None) && state.cellMayTeleport(b, c))
             classy(cell, "noughts", player == PLAYER.Noughts)
             classy(cell, "crosses", player == PLAYER.Crosses)
         }
     }
 }
 
+state = undefined;
+
 function newGame() {
-    resetGameState();
+    state = new MnacGame();
     updateBoard();
 }
 
