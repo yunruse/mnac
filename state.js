@@ -108,6 +108,8 @@ function doSend(board) {
 }
 
 function doPlay(board, cell) {
+    if (state.action === ACTION.PlayStart && board == 4)
+        return console.warn("House rule: cannot start in centre");
     if (state.grid[board][cell] !== PLAYER.None)
         return console.warn("This cell is already taken!");
 

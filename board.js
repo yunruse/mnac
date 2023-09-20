@@ -27,7 +27,7 @@ function refreshBoardElements() {
 
 function doHighlightBoard(board) {
     switch (state.action) {
-        case ACTION.PlayStart: return true;
+        case ACTION.PlayStart: return board !== 4;
         case ACTION.Play: return state.board == board;
         case ACTION.Send: return state.board !== board && state.boardsTaken[board] == PLAYER.None;
         default: return false;
