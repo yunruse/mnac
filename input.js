@@ -1,4 +1,5 @@
-
+// TODO: unify this? DRY and all
+// TODO: don't pushHistory if action isn't allowed...
 
 function cellWasClicked(board, cell) {
     console.group(`Cell ${board},${cell} was clicked`)

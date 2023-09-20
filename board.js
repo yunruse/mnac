@@ -3,8 +3,9 @@ function newElement(tag, cls) {
     el.classList = [cls]
     return el
 }
-function classy(element, cls, bool) {
-    bool ? element.classList.add(cls) : element.classList.remove(cls);
+function classy(el, cls, bool) {
+    var el = typeof el == "string" ? document.getElementById(el) : el
+    bool ? el.classList.add(cls) : el.classList.remove(cls);
 }
 
 function refreshBoardElements() {
@@ -36,9 +37,9 @@ function updateBoard() {
     document.getElementById('state').innerText = state.action;
     let O = state.player == PLAYER.Noughts;
     let X = state.player == PLAYER.Crosses;
-    classy(document.getElementById("titleNoughts"), "bold", O)
+    classy("titleNoughts", "bold", O)
     classy(document.body, "noughts", O)
-    classy(document.getElementById("titleCrosses"), "bold", X)
+    classy("titleCrosses", "bold", X)
     classy(document.body, "crosses", X)
 
     let boards = document.getElementById('game').children

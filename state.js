@@ -34,24 +34,21 @@ function resetGameState() {
 // History & state debug functions
 function save() { return JSON.stringify(state) }
 function load(json) {
-    for (const [k, v] of Object.entries(JSON.parse(json))) {
+    for (const [k, v] of Object.entries(JSON.parse(json)))
         state[k] = v
-    }
     updateBoard();
 }
 
 let stateHistory = [];
 function pushHistory() {
     let newState = save();
-    if (stateHistory[stateHistory.length - 1] === newState) {
+    if (stateHistory[stateHistory.length - 1] === newState)
         return console.info("Same history state pushed, skipping...");
-    }
     stateHistory.push(newState);
 }
 function popHistory() {
-    if (stateHistory.length == 0) {
+    if (stateHistory.length == 0)
         return console.info("No history to undo");
-    }
     load(stateHistory.pop());
 }
 
@@ -68,16 +65,12 @@ let GRID_WINNERS = [
     [2, 4, 6],
 ]
 function winner(grid) {
-    for (const player of [PLAYER.Noughts, PLAYER.Crosses]) {
-        for (const pattern of GRID_WINNERS) {
-            if (pattern.every(i => (grid[i] == player))) {
+    for (const player of [PLAYER.Noughts, PLAYER.Crosses])
+        for (const pattern of GRID_WINNERS)
+            if (pattern.every(i => (grid[i] == player)))
                 return player
-            }
-        }
-    };
-    if (grid.every(p => p != PLAYER.None)) {
+    if (grid.every(p => p != PLAYER.None))
         return PLAYER.Draw;
-    }
     return PLAYER.None;
 }
 
@@ -92,11 +85,10 @@ function countBoardsTaken() {
 // Interactivity
 
 function swapPlayer() {
-    if (state.player == PLAYER.Noughts) {
+    if (state.player == PLAYER.Noughts)
         state.player = PLAYER.Crosses;
-    } else if (state.player == PLAYER.Crosses) {
+    else if (state.player == PLAYER.Crosses)
         state.player = PLAYER.Noughts;
-    }
 }
 
 function cellMayTeleport(board, cell) {
@@ -105,22 +97,20 @@ function cellMayTeleport(board, cell) {
 }
 
 function doSend(board) {
-    if (state.boardsTaken[board] !== PLAYER.None) {
-        return console.info("Can't send to occupied board");
-    }
-    if (state.board == board) {
-        return console.info("Can't send to own board");
-    }
+    if (state.boardsTaken[board] !== PLAYER.None)
+        return console.warn("Can't send to occupied board");
+    if (state.board == board)
+        return console.warn("Can't send to own board");
+
     state.board = board;
     swapPlayer()
     state.action = ACTION.Play;
 }
 
 function doPlay(board, cell) {
-    if (state.grid[board][cell] !== PLAYER.None) {
-        console.info("This cell is already taken!");
-        return
-    }
+    if (state.grid[board][cell] !== PLAYER.None)
+        return console.warn("This cell is already taken!");
+
     state.grid[board][cell] = state.player
     state.boardsTaken[board] = winner(state.grid[board]);
 
