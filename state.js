@@ -97,7 +97,6 @@ function swapPlayer() {
     } else if (state.player == PLAYER.Crosses) {
         state.player = PLAYER.Noughts;
     }
-    clockSwapPlayers();
 }
 
 function cellMayTeleport(board, cell) {

@@ -33,25 +33,9 @@ function boardWasClicked(board) {
 
 // Keyboard handling
 
-const KB_NOUGHTS = {
-    "q": 1, "w": 2, "e": 3,
-    "a": 4, "s": 5, "d": 6,
-    "z": 7, "x": 8, "c": 9,
-}
-const KB_CROSSES = {
-    "u": 1, "i": 2, "o": 3,
-    "j": 4, "k": 5, "l": 6,
-    "m": 7, ",": 8, ".": 9,
-}
-
 window.addEventListener("keyup", function (event) {
     if (event.defaultPrevented) return;
     let key = event.key.toLowerCase();
-
-    if (state.player == PLAYER.Noughts)
-        key = KB_NOUGHTS[key] || key;
-    if (state.player == PLAYER.Crosses)
-        key = KB_CROSSES[key] || key;
 
     if (key == "backspace") {
         popHistory();

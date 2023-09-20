@@ -16,25 +16,22 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/static/icon16.png">
     <link rel="manifest" href="/static/site.webmanifest">
     -->
-    <script src="helpers.js"></script>
     <script src="state.js"></script>
     <script src="board.js"></script>
     <script src="input.js"></script>
-    <script src="clock.js"></script>
 </head>
 
 <body>
     <h1>
         Meta
-        <span id='titleNoughts'>noughts <span id='timerNoughts'></span></span>
+        <span id='titleNoughts'>noughts</span>
         and
-        <span id='titleCrosses'>crosses <span id='timerCrosses'></span></span>
+        <span id='titleCrosses'>crosses</span>
     </h1>
     <div class='container'>
         <div id='game'></div>
         <button onclick="popHistory();">Undo</button>
         <button onclick="newGame();">New game</button>
-        <label><input type="checkbox" id="timer"> Game timer</label>
     </div>
     <h2 id='state'>
         Select any cell to start playing
@@ -48,8 +45,6 @@
                 If you don't want to use a mouse, use the keys
                 <kbd>123 456 789</kbd>
                 to select the respective board or cell.
-                <kbd>QWE ASD ZXC</kbd> works for noughts, and
-                <kbd>UIO JKL M,.</kbd> for crosses.
                 You can always press <kbd>Backspace</kbd> to undo.
             </p>
         </em></small>
