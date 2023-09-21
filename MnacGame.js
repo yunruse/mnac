@@ -199,10 +199,11 @@ class MnacGame extends netplayjs.Game {
 
     // Drawing
     doHighlightBoard(board) {
+        if (this.boardsTaken[board] !== PLAYER.None) { return false; }
         switch (this.action) {
             case ACTION.PlayStart: return board !== 4;
             case ACTION.Play: return this.board == board;
-            case ACTION.Send: return this.board !== board && this.boardsTaken[board] == PLAYER.None;
+            case ACTION.Send: return this.board !== board;
             default: return false;
         }
     }
