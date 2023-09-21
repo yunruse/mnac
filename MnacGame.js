@@ -5,12 +5,18 @@ const PLAYER = {
     Noughts: 0,
     Crosses: 1,
 }
+
+const PLAYERNAME = {
+    [PLAYER.Noughts]: "Noughts",
+    [PLAYER.Crosses]: "Crosses",
+}
+
 const ACTION = {
-    PlayStart: "Select any cell to start playing",
-    Play: "Select a cell to play in",
-    Send: "Send your opponent to a different board",
-    Draw: "It's a draw!",
-    Win: "You win!",
+    PlayStart: "select a board to start playing",
+    Play: "select a cell to play in",
+    Send: "where to send your opponent to?",
+    Draw: "it's a draw!",
+    Win: "you win!",
 }
 const GRID_WINNERS = [
     [0, 3, 6], // Vertical
@@ -29,11 +35,10 @@ const COLORS = {
     },
 
     "highlight": {
+        [-1]: "#ddd",
         0: "#d66b00",
         1: "#0068cf",
     },
-
-    "board": "#ddd",
 
     "cell": {
         [-1]: "#eee",
@@ -50,9 +55,14 @@ const KEYMAP = {
     "q": 4, "w": 5, "e": 6,
     "a": 7, "s": 8, "d": 9,
 }
+// Grid coordinate shenanigans
+const TITLEHEIGHT = 20;
+const CELL = 40;
+const GUTTER = 10;
+const MARGIN = 4;
+const BOARD = CELL * 3 + GUTTER * 2 + MARGIN * 2;
+const MARKERWIDTH = 5;
 
-
-let AAAA = undefined
 
 function winner(grid) {
     for (const player of [PLAYER.Noughts, PLAYER.Crosses])
@@ -73,11 +83,12 @@ function classy(el, cls, bool) {
     bool ? el.classList.add(cls) : el.classList.remove(cls);
 }
 
-
-
 class MnacGame extends netplayjs.Game {
     static timestep = 10;
-    static canvasSize = { width: 600, height: 600 };
+    static canvasSize = {
+        width: BOARD * 3 + GUTTER * 4,
+        height: BOARD * 3 + GUTTER * 4 + TITLEHEIGHT
+    };
     static numPlayers = { min: 2, max: 2 };
 
     // ____  _        _
@@ -206,7 +217,33 @@ class MnacGame extends netplayjs.Game {
         return this.currentPlayer() == this.activePlayer
     }
 
+    markSymbol(ctx, player, x, y, isCell) {
+        ctx.strokeStyle = COLORS.cell[player];
+        ctx.lineWidth = isCell ? MARKERWIDTH : MARKERWIDTH * (BOARD / CELL);
+        ctx.globalAlpha = isCell ? 1 : 0.75;
+        let s = isCell ? CELL : BOARD;
+
+        ctx.beginPath()
+        if (player == PLAYER.Noughts) {
+            // avoid line extending outside of bounds
+            x += ctx.lineWidth / 2
+            y += ctx.lineWidth / 2
+            s -= ctx.lineWidth
+            ctx.moveTo(x, y)
+            ctx.lineTo(x + s, y + s)
+            ctx.moveTo(x, y + s)
+            ctx.lineTo(x + s, y)
+        }
+        if (player == PLAYER.Crosses) {
+            ctx.arc(x + s / 2, y + s / 2, (s - ctx.lineWidth) / 2, 0, 2 * Math.PI)
+        }
+        ctx.stroke()
+
+        ctx.globalAlpha = 1.0;
+    }
+
     draw(canvas) {
+        // TODO heavily cache: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
         const ctx = canvas.getContext("2d");
 
         let activePlayer = this.activePlayer
@@ -220,52 +257,80 @@ class MnacGame extends netplayjs.Game {
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         // Title
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
         ctx.fillStyle = "#4a4a4a"
-        ctx.font = "30px Arial"
-
-        let action = isActive ? this.action : "Waiting...";
-        ctx.fillText(action, 10, 50)
+        ctx.font = "24px Arial"
+        let action = PLAYERNAME[this.activePlayer] + (isActive ? ", " + this.action : " is taking their turn...");
+        ctx.fillText(action, GUTTER, GUTTER + TITLEHEIGHT)
 
         // Board
-
-        const Y0 = 80;
-        const X0 = 80;
-        const CELL = 40;
-        const GUTTER = 10;
-        const BOARD = CELL * 3 + GUTTER * 2
-
         // TODO: use some sort of coordinate transform for gutterspace?
-
 
         for (let b = 0; b < 9; b++) {
             let bx = b % 3
             let by = Math.floor(b / 3)
-            // Boards
+            bx = GUTTER + bx * (BOARD + GUTTER);
+            by = GUTTER + TITLEHEIGHT + by * (BOARD + GUTTER);
 
-            let H = this.doHighlightBoard(b)
-            let O = this.boardsTaken[b] == PLAYER.Noughts
-            let X = this.boardsTaken[b] == PLAYER.Crosses
+            // Highlight = board can be played in
+            let p = PLAYER.None;
+            if (isActive && this.doHighlightBoard(b))
+                p = activePlayer;
 
-            // TODO: highlight
-            // TODO: capture symbol
-
-            ctx.fillStyle = COLORS.board
-            bx = X0 + bx * (BOARD + GUTTER);
-            by = Y0 + by * (BOARD + GUTTER);
-            ctx.fillRect(bx, by, BOARD, BOARD)
-
+            let doDrawBoard = this.boardsTaken[b] === PLAYER.None
+            if (doDrawBoard) {
+                ctx.fillStyle = COLORS.highlight[p];
+                ctx.fillRect(bx, by, BOARD, BOARD)
+                // Inside background: board is taken
+                ctx.fillStyle = COLORS.highlight[-1]
+                ctx.fillRect(bx + MARGIN, by + MARGIN, BOARD - MARGIN * 2, BOARD - MARGIN * 2)
+            }
 
             // Cells
             for (let c = 0; c < 9; c++) {
                 let cx = c % 3
                 let cy = Math.floor(c / 3)
+                cx = bx + MARGIN + cx * (CELL + GUTTER);
+                cy = by + MARGIN + cy * (CELL + GUTTER);
+                let p = this.grid[b][c]
 
-                let p = this.cellMayTeleport(b, c) ? "teleport" : this.grid[b][c]
-                ctx.fillStyle = COLORS.cell[p];
-                cx = bx + cx * (CELL + GUTTER);
-                cy = by + cy * (CELL + GUTTER);
-                ctx.fillRect(cx, cy, CELL, CELL)
-                // TODO: capture symbols
+                if (doDrawBoard) {
+                    let cellbg = PLAYER.None
+                    if (p == PLAYER.None && this.cellMayTeleport(b, c))
+                        cellbg = "teleport";
+
+                    ctx.fillStyle = COLORS.cell[cellbg];
+                    ctx.fillRect(cx, cy, CELL, CELL)
+                }
+
+                this.markSymbol(ctx, p, cx, cy, true)
+                // Keyboard indicator: cell
+                let selectingCell = isActive && (this.action == ACTION.Play);
+                if (selectingCell && this.board == b && p == PLAYER.None) {
+                    ctx.globalAlpha = 0.75
+                    ctx.fillStyle = COLORS.cell[this.activePlayer];
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.font = "24pt Arial"
+                    ctx.fillText(c + 1, cx + CELL / 2, cy + CELL / 2)
+                    ctx.globalAlpha = 1;
+                }
+            }
+            // symbol on top of board
+            this.markSymbol(ctx, this.boardsTaken[b], bx, by, false)
+
+            // Keyboard indicator: board
+            let selectingBoard = isActive && (
+                this.action == ACTION.PlayStart || this.action == ACTION.Send);
+            if (selectingBoard && this.doHighlightBoard(b)) {
+                ctx.globalAlpha = 0.75
+                ctx.fillStyle = COLORS.cell[this.activePlayer];
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = "80pt Arial"
+                ctx.fillText(b + 1, bx + BOARD / 2, by + BOARD / 2)
+                ctx.globalAlpha = 1;
             }
         }
     }
