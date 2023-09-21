@@ -83,12 +83,12 @@ function classy(el, cls, bool) {
     bool ? el.classList.add(cls) : el.classList.remove(cls);
 }
 
+WIDTH = BOARD * 3 + GUTTER * 4;
+HEIGHT = BOARD * 3 + GUTTER * 4 + TITLEHEIGHT;
+
 class MnacGame extends netplayjs.Game {
     static timestep = 10;
-    static canvasSize = {
-        width: BOARD * 3 + GUTTER * 4,
-        height: BOARD * 3 + GUTTER * 4 + TITLEHEIGHT
-    };
+    static canvasSize = { width: WIDTH, height: HEIGHT };
     static numPlayers = { min: 2, max: 2 };
 
     // ____  _        _
@@ -99,9 +99,15 @@ class MnacGame extends netplayjs.Game {
 
     constructor(canvas, players) {
         super()
-        this.players = players;
         this.reset()
-        // this.showcase()
+        this.showcase()
+
+        this.players = players;
+
+        this.canvasCache = document.createElement('canvas');
+        this.canvasCache.width = WIDTH;
+        this.canvasCache.height = HEIGHT;
+        this.onChange(this.canvasCache)
     }
     reset() {
         this.activePlayer = PLAYER.Noughts
@@ -178,6 +184,9 @@ class MnacGame extends netplayjs.Game {
         }
     }
 
+    // serialise()
+    // deserialise()
+
     tick(inputMaps) {
         for (const [player, input] of inputMaps) {
             if (player.id !== this.activePlayer)
@@ -200,6 +209,7 @@ class MnacGame extends netplayjs.Game {
                 this.doSend(num);
                 break;
         }
+        this.onChange(this.canvasCache)
     }
 
     // ____
@@ -250,12 +260,19 @@ class MnacGame extends netplayjs.Game {
             ctx.arc(x + s / 2, y + s / 2, (s - ctx.lineWidth) / 2, 0, 2 * Math.PI)
         }
         ctx.stroke()
-
         ctx.globalAlpha = 1.0;
     }
 
+    // redrawn every frame, so pull from cache
     draw(canvas) {
-        // TODO heavily cache: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(this.canvasCache, 0, 0)
+        // TODO: can we optimise this more? it's very re-render heavy :(
+        // cf https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
+    }
+
+    // rewdrawn every action
+    onChange(canvas) {
         const ctx = canvas.getContext("2d");
 
         let activePlayer = this.activePlayer
