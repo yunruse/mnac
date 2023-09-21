@@ -100,12 +100,27 @@ class MnacGame extends netplayjs.Game {
     constructor(canvas, players) {
         super()
         this.players = players;
+        this.reset()
+        // this.showcase()
+    }
+    reset() {
         this.activePlayer = PLAYER.Noughts
         this.action = ACTION.PlayStart
         this.board = undefined
         this.grid = [...Array(9)].map(() => [...Array(9)].map(() => PLAYER.None))
         this.boardsTaken = [...Array(9)].map(() => PLAYER.None)
     }
+    showcase() {
+        this.grid[0] = [0, 0, 0, -1, -1, -1, -1, -1, -1]
+        this.boardsTaken[0] = PLAYER.Noughts
+
+        this.grid[1] = [1, 1, 1, -1, -1, -1, -1, -1, -1]
+        this.boardsTaken[1] = PLAYER.Crosses
+
+        this.grid[2] = [1, 0, 1, 1, 0, 1, 0, 1, 0]
+        this.boardsTaken[2] = PLAYER.Draw
+    }
+
     numBoardsTaken() {
         let total = 0
         for (const b of this.grid)
@@ -167,27 +182,23 @@ class MnacGame extends netplayjs.Game {
         for (const [player, input] of inputMaps) {
             if (player.id !== this.activePlayer)
                 continue
-
-            let num = undefined
             for (let key in KEYMAP)
                 if (input.keysPressed[key])
-                    num = KEYMAP[key] - 1
-
-            if (num === undefined)
-                continue
-
-            switch (this.action) {
-                case ACTION.PlayStart:
-                    this.action = ACTION.Play;
-                    this.board = num;
-                    break;
-                case ACTION.Play:
-                    this.doPlay(this.board, num)
-                    break;
-                case ACTION.Send:
-                    this.doSend(num);
-                    break;
-            }
+                    return this.doPress(KEYMAP[key] - 1)
+        }
+    }
+    doPress(num) {
+        switch (this.action) {
+            case ACTION.PlayStart:
+                this.action = ACTION.Play;
+                this.board = num;
+                break;
+            case ACTION.Play:
+                this.doPlay(this.board, num)
+                break;
+            case ACTION.Send:
+                this.doSend(num);
+                break;
         }
     }
 
