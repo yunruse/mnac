@@ -100,7 +100,7 @@ class MnacGame extends netplayjs.Game {
     constructor(canvas, players) {
         super()
         this.reset()
-        this.showcase()
+        // this.showcase()
 
         this.players = players;
 
@@ -125,6 +125,10 @@ class MnacGame extends netplayjs.Game {
 
         this.grid[2] = [1, 0, 1, 1, 0, 1, 0, 1, 0]
         this.boardsTaken[2] = PLAYER.Draw
+
+        this.grid[3] = [0, 0, -1, -1, -1, -1, -1, -1, -1]
+
+        this.grid[4] = [1, 1, -1, -1, -1, -1, -1, -1, -1]
     }
 
     numBoardsTaken() {
@@ -324,11 +328,8 @@ class MnacGame extends netplayjs.Game {
                 cy = by + MARGIN + cy * (CELL + GUTTER);
                 let p = this.grid[b][c]
 
-                if (doDrawBoard) {
-                    let cellbg = PLAYER.None
-                    if (p == PLAYER.None && this.cellMayTeleport(b, c))
-                        cellbg = "teleport";
-
+                if (doDrawBoard && p == PLAYER.None) {
+                    let cellbg = this.cellMayTeleport(b, c) ? "teleport" : PLAYER.None
                     ctx.fillStyle = COLORS.cell[cellbg];
                     ctx.fillRect(cx, cy, CELL, CELL)
                 }
