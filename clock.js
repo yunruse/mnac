@@ -58,3 +58,12 @@ function formatTime(t) {
     let s = String(Math.floor(t % 60)).padStart(2, 0)
     return ` (${m}:${s})`
 }
+
+function onClockFirstTurn() {
+    console.log('first turn', clockState, timer.checked)
+    // This was the first move, so
+    if (document.getElementById('timer').checked && !clockState.active) {
+        startTimer();
+    }
+    document.getElementById('timer').disabled = true;
+}

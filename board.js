@@ -68,8 +68,8 @@ function updateBoard() {
 function newGame() {
     resetGameState();
     updateBoard();
-    document.getElementById('timer').checked ?
-        startTimer() : stopTimer();
+    stopTimer();
+    document.getElementById('timer').disabled = false;
 }
 
 window.onload = function () {

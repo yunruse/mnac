@@ -56,6 +56,13 @@ function popHistory() {
     load(stateHistory.pop());
 }
 
+function sum(array) {
+    return array.reduce((a, b) => a + b, 0)
+}
+function cellCount() {
+    return sum(state.grid.map(b => sum(b.map(c => c !== '_'))))
+}
+
 // Winner calculation
 
 let GRID_WINNERS = [
@@ -154,6 +161,7 @@ function doPlay(board, cell) {
             }
         };
         // ...otherwise the Golden Rule kicks in; there is nowhere to send
+        // TODO: rank by whoever has the most boards
         state.action = ACTION.Draw;
         state.player = PLAYER.Draw;
     } else if (cellMayTeleport(board, cell)) {
@@ -165,5 +173,9 @@ function doPlay(board, cell) {
         swapPlayer()
         state.action = ACTION.Play;
         state.board = cell;
+
+        if (cellCount() == 1) {
+            onClockFirstTurn();
+        }
     }
 }
