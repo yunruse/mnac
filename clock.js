@@ -30,7 +30,6 @@ function clearTick() {
     clearInterval(clockState.timerId);
 }
 function onTick() {
-    console.log(clockState.cross, clockState.nought, clockState.lastSwap);
     let t = timePassed();
     let O = clockState.nought;
     let X = clockState.cross;
@@ -39,13 +38,13 @@ function onTick() {
     } else {
         X = X - t;
     }
-
     document.getElementById('timerNoughts').innerText = formatTime(O);
     document.getElementById('timerCrosses').innerText = formatTime(X);
 }
 
 function clockSwapPlayers() {
-    if (state.player == "Crosses") {
+    console.log(state.player, clockState)
+    if (state.player == PLAYER.Crosses) {
         clockState.nought -= timePassed();
     } else {
         clockState.cross -= timePassed();
