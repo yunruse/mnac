@@ -21,7 +21,13 @@
     aspect-ratio: 1;
 }
 
-.container {
+#controls {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+
+#container {
     text-align: center;
 }
 
@@ -52,7 +58,7 @@
 .cell.teleport {
     background-color: #cfc
 }
-.cell.danger {
+#container:has(#showDanger:checked) .cell.danger, .rules .danger {
     background-color: #fcc
 }
 
@@ -97,18 +103,6 @@ body.crosses {
     display: none;
 }
 
-#explanations {
-    text-align: left;
-    display: flex;
-    gap: calc(var(--gap) * 3);
-    align-items: center;
-    justify-content: center;
-    & small {
-        width: min-content;
-        min-width: 30%;
-    }
-}
-
 h1 {
     font-weight: normal;
 }
@@ -123,4 +117,16 @@ label {
 
 input {
     background-color: white;
+}
+
+.rules .right {
+    text-align: right;
+}
+.rules .right .cell {
+    float: right;
+    margin-left: 1rem;
+}
+.rules .left .cell {
+    float: left;
+    margin-right: 1rem;
 }

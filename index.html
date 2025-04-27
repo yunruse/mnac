@@ -30,16 +30,13 @@
         and
         <span id='titleCrosses'>crosses <span id='timerCrosses'></span></span>
     </h1>
-    <div class='container'>
+    <div id="container">
         <div id='game'></div>
-        <button onclick="popHistory();">Undo</button>
-        <button onclick="newGame();">New game</button>
-        <label><input type="checkbox" id="timer"> Game timer</label>
-        <div id="explanations">
-            <div class="cell teleport"></div>
-            <small><em>Teleport: you may pick which board to send your opponent to</em></small>
-            <div class="cell danger"></div>
-            <small><em>Danger: your opponent could take that board!</em></small>
+        <div id="controls">
+            <button onclick="popHistory();">Undo</button>
+            <button onclick="newGame();">New game</button>
+            <label><input type="checkbox" id="timer"> Game timer</label>
+            <label><input type="checkbox" id="showDanger" checked> Show danger</label>
         </div>
     </div>
     <h2 id='state'>
@@ -47,8 +44,43 @@
     </h2>
 
 
-    <small>(Source code on <a href="https://github.com/yunruse/mnac/">GitHub</a>!)</small>
-    <h4>How do I play?</h4>
+    <div class="rules">
+        <p>
+            Nine boards of nine cells each. Take a line of cells to win the board. Win a line of boards to win the game.
+            Simple, right?
+        </p>
+        <p>
+            But remember the <strong>Golden Rule</strong>:
+            <em>your opponent must be sent to a different board.</em>
+        </p>
+        <p class="left">
+            <span class="cell"></span>
+            In most cases, your choice affects both you and your opponent:
+            <br>
+            <strong>take the top-left cell and you send your opponent to the top-left board.</strong>
+        </p>
+        <p class=" right">
+            <span class="cell teleport"></span>
+            A cell can be a 'teleporter', because sending your opponent wouldn't work.
+            Take one and you can <em>choose</em> which board to send them to. Don't waste it!
+        </p>
+        <p class="left">
+            <span class="cell danger"></span>
+            Some boards could be won by your opponent right away - be mindful
+            if you take a cell that sends them there! <em>You can disable 'Show danger' if you'd like.</em>
+        </p>
+        <p class="right">
+            <span class="cell noughts"></span>
+            Which boards does your opponent want to take? Can you tell what their
+            strategy is and give them temptations that actually help you?
+        </p>
+        <p class="left">
+            <span class="cell crosses"></span>
+            Don't forget to think ahead a few turns. If only two boards remain, the <strong>Golden Rule</strong> locks
+            you both there. Can you lock your opponent into a loss?
+        </p>
+    </div>
+
     <small><em>
             <p>
                 If you don't want to use a mouse, use the keys
@@ -59,37 +91,9 @@
                 You can always press <kbd>Backspace</kbd> to undo.
             </p>
         </em></small>
-    <p>
-        As you can see, there are nine boards, each with nine cells.
-        Each board is its own game of noughts and crosses. If you win
-        three cells in a line, you win that board -- if you win three
-        boards in a line, you win the game!
-    </p>
-    <p>
-        <strong>The golden rule, however, is that your opponent always plays in a different board.</strong>
-        Almost always, this is your choice. If you play in the top-left cell, say, your opponent will
-        be sent to the top-left board. Therefore to take a board, your opponent has to actually send you there
-        - the fun of the game is using your wits to convince them to let you.
-    </p>
-    <p>
-        A few useful tips:
-    </p>
-    <ul>
-        <li>
-            If a cell would send you somewhere disallowed -- for example, the same board,
-            or one that has been won or drawn -- it is a <em>teleporter</em>, marked in green.
-            Playing a cell there results in you being able to choose which board to send your opponent to.
-            Use them before your opponent does!
-        </li>
-        <li>
-            Towards the endgame, the golden rule may be useful to
-            trap your opponent in a board by only leaving two left.
-        </li>
-        <li>
-            The middle board is quite useful.
-            Some times a house rule holds that the first player isn't allowed to start there.
-        </li>
-    </ul>
+
+    <small>(Source code on <a href="https://github.com/yunruse/mnac/">GitHub</a>!)</small>
+
 </body>
 
 </html>
