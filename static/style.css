@@ -45,6 +45,9 @@
 .cell.teleport {
     background-color: #cfc
 }
+.cell.danger {
+    background-color: #fcc
+}
 
 .cell.noughts,
 .board.noughts {

@@ -50,11 +50,17 @@ function updateBoard() {
         let cells = boards[b].children
         for (let c = 0; c < 9; c++) {
             const cell = cells[c]
-            let player = state.grid[b][c]
+            let cellTaker = state.grid[b][c]
 
-            classy(cell, "teleport", (player == PLAYER.None) && cellMayTeleport(b, c))
-            classy(cell, "noughts", player == PLAYER.Noughts)
-            classy(cell, "crosses", player == PLAYER.Crosses)
+            classy(cell, "danger", (cellTaker == PLAYER.None)
+                && !cellMayTeleport(b, c)
+                && b == state.board
+                && winner(state.grid[b]) == PLAYER.None
+                && couldTakeNextTurn(state.grid[c], nextPlayer(state.player)))
+
+            classy(cell, "teleport", (cellTaker == PLAYER.None) && cellMayTeleport(b, c))
+            classy(cell, "noughts", cellTaker == PLAYER.Noughts)
+            classy(cell, "crosses", cellTaker == PLAYER.Crosses)
         }
     }
 }

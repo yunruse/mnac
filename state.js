@@ -80,6 +80,15 @@ function winner(grid) {
     }
     return PLAYER.None;
 }
+function couldTakeNextTurn(grid, player) {
+    for (const pattern of GRID_WINNERS) {
+        let g = pattern.map(i => grid[i]);
+        if (g[1] == player && g[2] == player && g[0] == PLAYER.None) return true;
+        if (g[0] == player && g[2] == player && g[1] == PLAYER.None) return true;
+        if (g[0] == player && g[1] == player && g[2] == PLAYER.None) return true;
+    }
+    return false;
+}
 
 function countBoardsTaken() {
     let total = 0
@@ -91,12 +100,14 @@ function countBoardsTaken() {
 
 // Interactivity
 
-function swapPlayer() {
-    if (state.player == PLAYER.Noughts) {
-        state.player = PLAYER.Crosses;
-    } else if (state.player == PLAYER.Crosses) {
-        state.player = PLAYER.Noughts;
+function nextPlayer(player) {
+    switch (player) {
+        case PLAYER.Noughts: return PLAYER.Crosses;
+        case PLAYER.Crosses: return PLAYER.Noughts;
     }
+}
+function swapPlayer() {
+    state.player = nextPlayer(state.player);
     clockSwapPlayers();
 }
 
