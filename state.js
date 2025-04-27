@@ -142,7 +142,18 @@ function doPlay(board, cell) {
         state.action = (gameWinner == PLAYER.Draw) ? ACTION.Draw : ACTION.Win;
         state.player = gameWinner;
     } else if (countBoardsTaken() == 8) {
-        // Draw by exhaustion
+        // If the player could take the final grid in the next turn, they've won...
+        let nP = nextPlayer(state.player);
+        if (couldTakeNextTurn(state.boardsTaken, nP)) {
+            for (const board of state.grid) {
+                if (winner(board) === PLAYER.None && couldTakeNextTurn(board, nP)) {
+                    state.action = ACTION.Win
+                    state.player = nP;
+                    return;
+                }
+            }
+        };
+        // ...otherwise the Golden Rule kicks in; there is nowhere to send
         state.action = ACTION.Draw;
         state.player = PLAYER.Draw;
     } else if (cellMayTeleport(board, cell)) {
