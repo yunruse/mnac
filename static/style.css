@@ -1,3 +1,11 @@
+:root {
+    --width-game: 60vh;
+    --gap: calc(var(--width-game)/90);
+    --border: calc(var(--gap) * 0.6);
+    --width-board: calc(var(--width-game)/3 - 2*var(--gap));
+    --width-cell: calc(var(--width-board)/3 - var(--gap));
+}
+
 #game,
 .board {
     display: flex;
@@ -19,9 +27,8 @@
 
 #game {
     text-align: center;
-    width: 100%;
-    max-width: 60vh;
-    gap: 5px;
+    width: var(--width-game);
+    gap: var(--gap);
     margin-bottom: 1em;
     margin-left: auto;
     margin-right: auto;
@@ -29,13 +36,13 @@
 
 .board {
     background-color: #ddd;
-    gap: 4px;
-    width: calc(33% - 10px);
-    border: 3px solid transparent;
+    gap: calc(var(--gap)/2);
+    width: var(--width-board);
+    border: var(--border) solid transparent;
 }
 
 .cell {
-    width: calc(33% - 5px);
+    width: var(--width-cell);
     background-color: #eee;
     text-align: center;
     font-size: 1.2em;
@@ -88,10 +95,6 @@ body.crosses {
 .cell.crosses .cellTag,
 .cell.noughts .cellTag {
     display: none;
-}
-
-#state {
-    height: 3em;
 }
 
 h1 {
