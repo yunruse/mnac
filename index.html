@@ -8,15 +8,13 @@
     <link rel="stylesheet" href="./static/normalize.css" type="text/css">
     <link rel="stylesheet" href="./static/sakura.css" type="text/css">
     <link rel="stylesheet" href="./static/style.css" type="text/css">
-    <!--
-    <link rel="stylesheet" href="/static/style.css" type="text/css">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/icon180.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon512.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/icon32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/icon16.png">
-    <link rel="manifest" href="/static/site.webmanifest">
-    -->
-    <script src="helpers.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/icon180.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./static/icon512.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/icon32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/icon16.png">
+    <link rel="manifest" href="./static/site.webmanifest">
+
     <script src="state.js"></script>
     <script src="board.js"></script>
     <script src="input.js"></script>
@@ -24,6 +22,12 @@
 </head>
 
 <body>
+    <div class="hidden">
+        <h1>Meta noughts and crosses</h1>
+        <h2>
+            Nine boards of nine cells each. Take a line of cells to win the board. Win a line of boards to win the game.
+        </h2>
+    </div>
     <h1>
         Meta
         <span id='titleNoughts'>noughts <span id='timerNoughts'></span></span>
