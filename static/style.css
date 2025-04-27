@@ -97,6 +97,18 @@ body.crosses {
     display: none;
 }
 
+#explanations {
+    text-align: left;
+    display: flex;
+    gap: calc(var(--gap) * 3);
+    align-items: center;
+    justify-content: center;
+    & small {
+        width: min-content;
+        min-width: 30%;
+    }
+}
+
 h1 {
     font-weight: normal;
 }
