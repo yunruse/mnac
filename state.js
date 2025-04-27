@@ -10,6 +10,7 @@ let ACTION = {
     PlayStart: "Select any cell to start playing",
     Play: "Select a cell to play in",
     Send: "Send your opponent to a different board",
+    Lose: "You lost!",
     Draw: "It's a draw!",
     Win: "You win!",
 }
@@ -147,8 +148,7 @@ function doPlay(board, cell) {
         if (couldTakeNextTurn(state.boardsTaken, nP)) {
             for (const board of state.grid) {
                 if (winner(board) === PLAYER.None && couldTakeNextTurn(board, nP)) {
-                    state.action = ACTION.Win
-                    state.player = nP;
+                    state.action = ACTION.Lose;
                     return;
                 }
             }
